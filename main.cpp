@@ -3,7 +3,6 @@
 #include <unordered_map>
 #include <map>
 #include <fstream>
-#include <string>
 
 using namespace std;
 
@@ -23,12 +22,26 @@ struct vehicle {
     }
 };
 
+struct Customer {
+    string name;
+    shared_ptr<vehicle> rentedVehicle;
+};
+
+
+map<string, Customer> customers;
 unordered_map<int, unique_ptr<vehicle>> fleet;
 
 void addVehicle(int regNum, vehicleType type, double price) {
     fleet[regNum] = make_unique<vehicle>(vehicle{type,price, regNum, true});
 }
 
+void addCustomer(string name) {
+    customers[name] = Customer{name,nullptr};
+}
+
+//TODO
+void rentVehicle(){}
+void returnVehicle(){};
 
 int main() {
 
@@ -41,6 +54,13 @@ int main() {
 
     for (const auto& type : fleet) {
         fleet[type.first]->printInfo();
+    }
+
+    addCustomer("Eli Smith");
+    addCustomer("Adam Red");
+
+    for (const auto& person : customers) {
+        cout << person.first << endl;
     }
 
     return 0;
