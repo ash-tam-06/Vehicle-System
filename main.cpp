@@ -42,6 +42,5 @@ int main() {
     for (const auto& type : fleet) {
         fleet[type.first]->printInfo();
     }
-
     return 0;
 }
