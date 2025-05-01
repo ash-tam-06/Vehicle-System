@@ -39,23 +39,20 @@ void addCustomer(const string& name) {
     customers[name] = Customer{name,nullptr};
 }
 
-void rentVehicle(const string& customerName, const int& regNum) {
+bool rentVehicle(const string& customerName, const int& regNum) {
     if (!fleet.contains(regNum) || !fleet[regNum]->available) {
-        std::cout << "Vehicle unavailable.\n";
-        return;
+        cout << "Vehicle unavailable." << endl;
+        return false;
     }
-
     const auto sharedVehicle = shared_ptr<vehicle>(fleet[regNum].get(), [](vehicle*) {
         // Empty deleter since fleet owns the memory
     });
-
     fleet[regNum]->available = false;
     customers[customerName].rentedVehicle = sharedVehicle;
-
-    std::cout << customerName << " rented " << regNum << "\n";
+    cout << customerName << " rented: " << regNum << endl;
+    return true;
 }
 
-//TODO
 void returnVehicle(const string& customerName) {
     if (customers[customerName].rentedVehicle != nullptr) {
         customers[customerName].rentedVehicle->available = true;
@@ -66,13 +63,58 @@ void returnVehicle(const string& customerName) {
     }
 };
 
-int main() {
+bool saveToFile(/*fleet*/) {
+    fstream file;
+    file.open("fleet.csv", ios::in | ios::out | ios::trunc);
+    if (!file.is_open()) {
+        cout << "Failed to open file " << endl;
+        return false;
+    }
+    file.seekg(0, ios::end);
+    for (const auto& pair : fleet) {
+        file << pair.first << "," << static_cast<int>(pair.second->type) << "," << pair.second->available << "\n";
+    }
+    file.close();
+}
+
+void loadFromFile(const string& filename) {
+    ifstream file(filename);
+    file.open("fleet.csv");
+    if(file.is_open()) {
+        string str;
+        getline(file, str);
+        cout<< str << '\n';
+        while(!file.eof()) {
+            getline(file, str, ',');
+            if(str.empty()) continue;
+            vehicle vehicle;
+            vehicle.regNumber = stoi(str);
+
+            getline(file, str, ',');
+            vehicle.type = static_cast<vehicleType>(stoi(str));
+
+            getline(file, str);
+            vehicle.available = stoi(str);
+
+            cout << vehicle.regNumber << '\n';
+            cout << vehicle.available << '\n';
+            cout << vehicle.type << "\n";
+        }
+    }
+
+    file.close();
+
+}
+
+int main(){
 
     vehicle vehicle{bike,  12, true};
 
     //vehicle.printInfo();
 
     addVehicle(12, bike);
+
+    saveToFile();
     addVehicle(13, car);
 
     for (const auto& type : fleet) {
@@ -92,6 +134,11 @@ int main() {
     returnVehicle("Eli Smith");
     returnVehicle("Adam Red");
     returnVehicle("Eli Smith");
+
+    saveToFile();
+
+    loadFromFile("fleet.csv");
+
 
     return 0;
 }
