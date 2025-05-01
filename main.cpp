@@ -25,14 +25,43 @@ struct vehicle {
 struct Customer {
     string name;
     shared_ptr<vehicle> rentedVehicle;
+
+    void printInfo() {
+        cout << "Name: " << name << endl;
+    }
 };
 
 
 map<string, Customer> customers;
 unordered_map<int, unique_ptr<vehicle>> fleet;
 
-void addVehicle(const int regNum, const vehicleType type) {
-    fleet[regNum] = make_unique<vehicle>(vehicle{type, regNum, true});
+bool addVehicle() {
+    int regNum;
+    int type;
+    while (true) {
+        cout << "Enter vehicle registration number: " << endl;
+        cin >> regNum;
+        if(cin.fail()){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cout<< "invalid input. please enter a valid registration number.\n";
+        }else{
+            cin.ignore(numeric_limits<streamsize>:: max(),'\n');
+            break;
+        }
+    }
+    while (true) {
+        cout << "Enter vehicle type: " << endl;
+        cin >> type;
+        if(cin.fail()){cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cout<< "invalid input. please enter a valid vehicle type.\n";
+        }else{
+            cin.ignore(numeric_limits<streamsize>:: max(),'\n');
+            break;
+        }
+    }
+    fleet[regNum] = make_unique<vehicle>(vehicle{static_cast<vehicleType>(type), regNum, true});
 }
 
 void addCustomer(const string& name) {
@@ -45,7 +74,7 @@ bool rentVehicle(const string& customerName, const int& regNum) {
         return false;
     }
     const auto sharedVehicle = shared_ptr<vehicle>(fleet[regNum].get(), [](vehicle*) {
-        // Empty deleter since fleet owns the memory
+
     });
     fleet[regNum]->available = false;
     customers[customerName].rentedVehicle = sharedVehicle;
@@ -70,25 +99,55 @@ bool saveToFile(/*fleet*/) {
         cout << "Failed to open file " << endl;
         return false;
     }
-    file.seekg(0, ios::end);
     for (const auto& pair : fleet) {
         file << pair.first << "," << static_cast<int>(pair.second->type) << "," << pair.second->available << "\n";
     }
     file.close();
+
+    ofstream fileBinary("customers.dat", ios::binary);
+    if (!fileBinary.is_open()) {
+        cout << "Failed to open file " << endl;
+        return false;
+    }
+    for (const auto& pair : customers) {
+        fileBinary.write(reinterpret_cast<const char*>(&pair.first), sizeof(pair.first));
+        fileBinary.write(reinterpret_cast<const char*>(&pair.second), sizeof(pair.second));
+    }
+    fileBinary.close();
+    return true;
 }
 
-void loadFromFile() {
+bool loadFromFile() {
     ifstream file("fleet.csv");
     int reg;
     int typeInt;
     bool available;
     char comma;
-
+    file.open("fleet.csv", ios::in);
+    if (!file.is_open()) {
+        cout << "Failed to open file " << endl;
+        return false;
+    }
     while (file >> reg >> comma >> typeInt >> comma >> available) {
         addVehicle(reg, static_cast<vehicleType>(typeInt));
         fleet[reg]->available = available;
     }
     cout << "Fleet loaded from CSV.\n";
+    file.close();
+
+    fstream fileBinary;
+    fileBinary.open("customers.dat", ios::in | ios::out | ios::binary);
+    if (!fileBinary.is_open()) {
+        cout << "Failed to open file " << endl;
+        return false;
+    }
+    Customer customer;
+    while (fileBinary.read(reinterpret_cast<char*>(&customer), sizeof(customer))) {
+        customers[customer.name] = customer;
+        customer.printInfo();
+    }
+    file.close();
+    return true;
 }
 
 void menu() {
