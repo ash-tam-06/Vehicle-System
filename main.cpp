@@ -77,32 +77,62 @@ bool saveToFile(/*fleet*/) {
     file.close();
 }
 
-void loadFromFile(const string& filename) {
-    ifstream file(filename);
-    file.open("fleet.csv");
-    if(file.is_open()) {
-        string str;
-        getline(file, str);
-        cout<< str << '\n';
-        while(!file.eof()) {
-            getline(file, str, ',');
-            if(str.empty()) continue;
-            vehicle vehicle;
-            vehicle.regNumber = stoi(str);
+void loadFromFile() {
+    ifstream file("fleet.csv");
+    int reg;
+    int typeInt;
+    bool available;
+    char comma;
 
-            getline(file, str, ',');
-            vehicle.type = static_cast<vehicleType>(stoi(str));
-
-            getline(file, str);
-            vehicle.available = stoi(str);
-
-            cout << vehicle.regNumber << '\n';
-            cout << vehicle.available << '\n';
-            cout << vehicle.type << "\n";
-        }
+    while (file >> reg >> comma >> typeInt >> comma >> available) {
+        addVehicle(reg, static_cast<vehicleType>(typeInt));
+        fleet[reg]->available = available;
     }
+    cout << "Fleet loaded from CSV.\n";
+}
 
-    file.close();
+void menu() {
+    int choice;
+    cout << "Please choose an option:\n";
+    cout << "1. Add vehicle\n";
+    cout << "2. Rent vehicle\n";
+    cout << "3. Return vehicle\n";
+    cout << "4. Load fleet\n";
+    cout << "5. Save fleet\n";
+    cout << "9. Exit\n";
+    cin >> choice;
+
+    while (choice != 9) {
+        if (choice == 1) {
+            int regNum;
+            int type;
+            cout << "Enter vehicle reg num: ";
+            cin >> regNum;
+            cout << "Enter vehicle type: (0 = Car, 1 = Bike, 2 = Truck)";
+            cin >> type;
+            addVehicle(regNum, static_cast<vehicleType>(type));
+        }else if (choice == 2) {
+            string name;
+            int regNum;
+            cout << "Customer full name: ";
+            cin >> name;
+            cout << "Vehicle reg num: "; //TODO this part loops for forever if given full name
+                                         //with a space
+            cin >> regNum;
+            rentVehicle(name, regNum);
+        }else if (choice == 3) {
+            string name;
+            cout << "Customer full name: ";
+            cin >> name;
+            returnVehicle(name);
+        }else if (choice == 4) {
+            loadFromFile();
+        } else if (choice == 5) {
+            saveToFile();
+        }
+        cout << "Please choose an option:\n";
+        cin >> choice;
+    }
 
 }
 
@@ -137,8 +167,8 @@ int main(){
 
     saveToFile();
 
-    loadFromFile("fleet.csv");
+    loadFromFile();
 
-
+    menu();
     return 0;
 }
