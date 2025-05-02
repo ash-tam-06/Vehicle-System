@@ -3,30 +3,33 @@
 #include <memory>
 #include <unordered_map>
 #include <map>
-#include <fstream>
 
 using namespace std;
 
 enum vehicleType {bike, car, van};
 struct vehicle {
     vehicleType type;
-    // double price;
     int regNumber;
     bool available;
 
-    void printInfo() {
+    void printInfo() const {
         cout << "Registration Number: "<< regNumber << endl;
         cout << "Vehicle type: " <<(type == bike ? "Bike" : type == car ? "Car" : "Van") << endl;
-        //cout << "Price: " << price << endl;
         cout << "Available: " << (available == true ? "Available" : "Rented" ) << endl;
     }
 };
 
-struct Customer {
-    string name;
-    shared_ptr<vehicle> rentedVehicle;
 
-    void printInfo() {
-        cout << "Name: " << name << endl;
-    }
-};
+void addVehicle(int reg, vehicleType type);
+
+bool saveToFile();
+
+bool loadFromFile();
+
+vehicle validateVehicle();
+
+void validateReturn();
+
+void validateRentVehicle();
+
+void menu();
