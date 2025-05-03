@@ -9,10 +9,12 @@
 
 using namespace std;
 
+//function to add a new customer
 void addCustomer(const string& name) {
     customers[name] = Customer{name,nullptr};
 }
 
+//function to amke sure user input is valid for customer name
 string validateCustomerName() {
     bool isValid=false;
     string name;
@@ -28,7 +30,7 @@ string validateCustomerName() {
     return name;
 }
 
-
+//function to rent out vehicles to specified customer
 bool rentVehicle(const string& customerName, const int& regNum) {
     if (!fleet.contains(regNum) || !fleet[regNum]->available) {
         cout << "Vehicle unavailable." << endl;
@@ -43,6 +45,8 @@ bool rentVehicle(const string& customerName, const int& regNum) {
     return true;
 }
 
+//function to return vehicle, making sure vehicle becomes available
+//and customer is not pointing to it anymore
 bool returnVehicle(const string& customerName) {
     if (customers[customerName].rentedVehicle != nullptr) {
         customers[customerName].rentedVehicle->available = true;

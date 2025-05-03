@@ -9,28 +9,7 @@
 using namespace std;
 
 int main(){
-    unordered_map<int, unique_ptr<vehicle>> fleet;
-    map<string, Customer> customerList;
-
-
-    vehicle vehicle{car,  11, true};
-    addVehicle(12, bike);
-    addVehicle(13, car);
-
-    addCustomer("Eli Smith");
-    addCustomer("Adam Red");
-
-    rentVehicle("Eli Smith", 12);
-    rentVehicle("Adam Red", 10);
-    rentVehicle("Adam Red", 13);
-    returnVehicle("Eli Smith");
-    returnVehicle("Adam Red");
-    returnVehicle("Eli Smith");
-
-    saveToFile();
-
-    loadFromFile();
-
+    //User interface: gives options for user on what they could do
     menu();
     return 0;
 }

@@ -10,11 +10,15 @@
 
 using namespace std;
 
+//function to add a new vehicle to fleet
 void addVehicle(int reg, vehicleType type) {
     fleet[reg] = make_unique<vehicle>(vehicle{type, reg, true});
 }
 
+//function to save data from global variables to files
 bool saveToFile() {
+    //for csv file
+    //works with fleet
     fstream file;
     file.open("fleet.csv", ios::in | ios::out | ios::trunc);
     if (!file.is_open()) {
@@ -26,6 +30,8 @@ bool saveToFile() {
     }
     file.close();
 
+    //for binary file
+    //works with customers
     ofstream fileBinary("customers.dat", ios::binary);
     if (!fileBinary.is_open()) {
         cout << "Failed to open customer file." << endl;
@@ -41,7 +47,9 @@ bool saveToFile() {
     return true;
 }
 
+//function to load data from files to our global variables
 bool loadFromFile() {
+    //from csv file to fleet
     ifstream file("fleet.csv");
     int reg;
     int typeInt;
@@ -59,6 +67,7 @@ bool loadFromFile() {
     cout << "Fleet loaded from CSV.\n";
     file.close();
 
+    //from binary(.dat) file to customers
     fstream fileBinary("customers.dat", ios::in | ios::binary);
     if (!fileBinary.is_open()) {
         cout << "Failed to open customer file." << endl;
@@ -78,6 +87,7 @@ bool loadFromFile() {
     return true;
 }
 
+//function to make sure user input is valid for new vehicle
 vehicle validateVehicle() {
     int regNum;
     int type;
@@ -109,7 +119,7 @@ vehicle validateVehicle() {
     return vehicle;
 }
 
-
+//function that uses validateCustomerName to correctly return a vehicle
 void validateReturn() {
     while (true) {
         string name = validateCustomerName();
@@ -122,6 +132,7 @@ void validateReturn() {
     }
 }
 
+//function to make sure vehicle exists to rent out
 void validateRentVehicle() {
     string name = validateCustomerName();
     int regNum;
@@ -139,6 +150,7 @@ void validateRentVehicle() {
     }
 }
 
+//function that gives users options on what they are able to do
 void menu() {
     int choice;
     cout << "Please choose an option:\n";
