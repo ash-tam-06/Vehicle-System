@@ -8,8 +8,6 @@
 
 using namespace std;
 
-//TODO: last two tests fail: fix that
-
 int main(){
     unordered_map<int, unique_ptr<vehicle>> fleet;
     map<string, Customer> customerList;

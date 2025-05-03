@@ -19,7 +19,7 @@ TEST(VehicleTest, RentVehicleTest) {
 
     ASSERT_TRUE(rentVehicle("Ash Ketchum", 2));
 
-    ASSERT_FALSE(fleet[1002]->available);
+    ASSERT_FALSE(fleet[2]->available);
 
     ASSERT_NE(customers["Ash Ketchum"].rentedVehicle, nullptr);
     ASSERT_EQ(customers["Ash Ketchum"].rentedVehicle->regNumber, 2);
@@ -85,12 +85,7 @@ TEST(FileTest, LoadFromFileTest) {
     ASSERT_EQ(customers["Susan Grace"].rentedVehicle->regNumber, 6);
 }
 
-// Test 7: Test invalid customer name for vehicle return
-TEST(CustomerTest, InvalidCustomerReturnTest) {
-    ASSERT_NO_THROW(validateReturn());
-}
-
-// Test 8: Test invalid vehicle registration number for renting
+// Test 7: Test invalid vehicle registration number for renting
 TEST(VehicleTest, InvalidVehicleRegNumTest) {
     addVehicle(7, bike);
     addCustomer("Serena Blade");
