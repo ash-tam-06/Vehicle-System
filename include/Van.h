@@ -1,7 +1,3 @@
-//
-// Created by Asmita Tamang on 5/20/25.
-//
-
 #ifndef VAN_H
 #define VAN_H
 
@@ -16,4 +12,4 @@ public:
 
 
 
-#endif //VAN_H
+#endif

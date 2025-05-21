@@ -1,7 +1,3 @@
-//
-// Created by Asmita Tamang on 5/20/25.
-//
-
 #ifndef FLEETMANAGER_H
 #define FLEETMANAGER_H
 #include <iostream>
@@ -17,16 +13,6 @@ private:
     unordered_map<int, shared_ptr<Vehicle>> fleet;
     map<string, Customer> customers;
 
-
-//    shared_ptr<Vehicle> createVehicle(VehicleType type, int reg) {
-//        switch (type) {
-//            case VehicleType::car: return shared_ptr<car>(reg);
-//            case VehicleType::van: return make_shared<van>(reg);
-//            case VehicleType::bike: return make_shared<bike>(reg);
-//        }
-//        return nullptr;
-//    }
-
 public:
     void addVehicle();
     void addCustomer(const string& name);
@@ -39,4 +25,4 @@ public:
 
 
 
-#endif //FLEETMANAGER_H
+#endif

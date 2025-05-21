@@ -1,7 +1,3 @@
-//
-// Created by Asmita Tamang on 5/20/25.
-//
-
 #ifndef CAR_H
 #define CAR_H
 
@@ -17,4 +13,4 @@ public:
 
 
 
-#endif //CAR_H
+#endif

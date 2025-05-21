@@ -1,7 +1,3 @@
-//
-// Created by Asmita Tamang on 5/20/25.
-//
-
 #ifndef BIKE_H
 #define BIKE_H
 
@@ -17,4 +13,4 @@ public:
 
 
 
-#endif //BIKE_H
+#endif

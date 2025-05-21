@@ -1,7 +1,3 @@
-//
-// Created by Asmita Tamang on 5/20/25.
-//
-
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
@@ -22,7 +18,7 @@ public:
 
     int getRegNumber() const;
     bool isAvailable() const;
-    void setAvailable(bool available);
+    void setAvailable(const bool available);
 
     virtual VehicleType getType() const = 0;
 };

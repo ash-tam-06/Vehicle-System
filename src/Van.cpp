@@ -1,7 +1,3 @@
-//
-// Created by Asmita Tamang on 5/20/25.
-//
-
 #include "../include/Van.h"
 
 Van::Van(int reg) : Vehicle(reg) {

@@ -1,7 +1,3 @@
-//
-// Created by Asmita Tamang on 5/20/25.
-//
-
 #include "../include/FleetManager.h"
 #include "../include/Customer.h"
 #include "../include/Vehicle.h"

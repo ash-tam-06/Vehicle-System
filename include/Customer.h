@@ -1,7 +1,3 @@
-//
-// Created by Asmita Tamang on 5/20/25.
-//
-
 #ifndef CUSTOMER_H
 #define CUSTOMER_H
 #include "Vehicle.h"
@@ -31,4 +27,4 @@ public:
 
 
 
-#endif //CUSTOMER_H
+#endif

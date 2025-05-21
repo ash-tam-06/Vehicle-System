@@ -12,6 +12,6 @@ bool Vehicle::isAvailable() const {
         return available;
 }
 
-void Vehicle::setAvailable(bool available) {
+void Vehicle::setAvailable(const bool available) {
         this->available = available;
 }
