@@ -2,7 +2,7 @@
 // Created by Asmita Tamang on 5/20/25.
 //
 
-#include "Bike.h"
+#include "../include/Bike.h"
 
 Bike::Bike(int reg) : Vehicle(reg) {
   std::cout << "Bike made" << std::endl;

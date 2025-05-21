@@ -3,10 +3,8 @@ project(Vehicle_System)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Vehicle_System main.cpp
-        src/customer_system.cpp
-        src/vehicle_system.cpp
-        src/globals.cpp)
+add_executable(Vehicle_System main.cpp src/Bike.cpp src/Car.cpp src/Customer.cpp src/Van.cpp src/Vehicle.cpp
+)
 
 include(FetchContent)
 FetchContent_Declare(
@@ -19,9 +17,7 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(system_test test/system_test.cpp
-        src/customer_system.cpp
-        src/globals.cpp
-        src/vehicle_system.cpp)
+)
 
 target_include_directories(system_test PRIVATE include)
 target_link_libraries(system_test gtest_main)

@@ -4,20 +4,19 @@
 #include <map>
 #include <fstream>
 
-//#include "include/vehicle_system.h"
-// #include "include/vehicle_system.h"
-// #include "include/customer_system.h"
-
-#include "Vehicle.h"
-#include "Car.h"
-#include "Van.h"
-#include "Bike.h"
+#include "include/Vehicle.h"
+#include "include/Car.h"
+#include "include/Van.h"
+#include "include/Bike.h"
+#include "include/Customer.h"
 
 using namespace std;
 
 int main(){
-    //User interface: gives options for user on what they could do
-    // menu();
-    // return 0;
+    Car car{12};
+    Van van{12};
+    Bike bike{12};
+    Customer customer{"Bob"};
 
+    return 0;
 }
