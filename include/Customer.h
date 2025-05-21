@@ -14,7 +14,7 @@ private:
     shared_ptr<Vehicle> rentedVehicle;
 
 public:
-    Customer(string name);
+    Customer(string* name);
 
     string getName() const;
 

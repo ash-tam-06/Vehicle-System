@@ -9,14 +9,12 @@
 #include "include/Van.h"
 #include "include/Bike.h"
 #include "include/Customer.h"
+#include "include/FleetManager.h"
 
 using namespace std;
 
 int main(){
-    Car car{12};
-    Van van{12};
-    Bike bike{12};
-    Customer customer{"Bob"};
-
+    FleetManager manager;
+    manager.menu();
     return 0;
 }
