@@ -3,7 +3,13 @@ project(Vehicle_System)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Vehicle_System main.cpp src/Bike.cpp src/Car.cpp src/Customer.cpp src/Van.cpp src/Vehicle.cpp
+add_executable(Vehicle_System main.cpp
+        src/Bike.cpp
+        src/Car.cpp
+        src/Customer.cpp
+        src/Van.cpp 
+        src/Vehicle.cpp
+        src/FleetManager.cpp
 )
 
 include(FetchContent)
