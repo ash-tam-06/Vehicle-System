@@ -7,7 +7,7 @@ add_executable(Vehicle_System main.cpp
         src/Bike.cpp
         src/Car.cpp
         src/Customer.cpp
-        src/Van.cpp 
+        src/Van.cpp
         src/Vehicle.cpp
         src/FleetManager.cpp
 )
@@ -23,6 +23,12 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(system_test test/system_test.cpp
+        src/Bike.cpp
+        src/Car.cpp
+        src/Customer.cpp
+        src/Van.cpp
+        src/Vehicle.cpp
+        src/FleetManager.cpp
 )
 
 target_include_directories(system_test PRIVATE include)
