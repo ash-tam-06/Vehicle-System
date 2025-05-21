@@ -13,7 +13,9 @@ Customer::Customer(string name) : name(move(name)), rentedVehicle(nullptr) {
     cout << "Customer created" << endl;
 }
 
-string Customer::getName() const { return name; }
+string Customer::getName() const {
+    return name;
+}
 
 void Customer::rentVehicle(shared_ptr<Vehicle> vehicle) {
     rentedVehicle = vehicle;

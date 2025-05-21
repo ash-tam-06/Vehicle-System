@@ -9,6 +9,7 @@
 #include "../include/Car.h"
 #include "../include/Van.h"
 #include "fstream"
+#include "sstream"
 
 using namespace std;
 
@@ -21,19 +22,19 @@ void FleetManager::addVehicle() {
         if(cin.fail()){
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(),'\n');
-            cout<< "invalid input. please enter a valid registration number.\n";
+            cout<< "Invalid input. Please enter a valid registration number.\n";
         }else{
             cin.ignore(numeric_limits<streamsize>:: max(),'\n');
             break;
         }
     }
     while (true) {
-        cout << "Enter vehicle type: " << endl;
+        cout << "Enter vehicle type (0: Bike, 1: Car, 2: Van): " << endl;
         cin >> type;
         if(cin.fail() || (type < 0 || type > 2)){
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(),'\n');
-            cout<< "invalid input. please enter a valid vehicle type.\n";
+            cout<< "Invalid input. Please enter a valid vehicle type.\n";
         }else{
             cin.ignore(numeric_limits<streamsize>:: max(),'\n');
             break;
@@ -41,11 +42,11 @@ void FleetManager::addVehicle() {
     }
 
     if (type == 0) {
-        fleet[regNum] = make_unique<Bike>(bike);
+        fleet[regNum] = make_unique<Bike>(regNum);
     } else if (type == 1) {
-        fleet[regNum] = make_unique<Car>(car);
+        fleet[regNum] = make_unique<Car>(regNum);
     } else if (type == 2) {
-        fleet[regNum] = make_unique<Van>(van);
+        fleet[regNum] = make_unique<Van>(regNum);
     }
 }
 
@@ -61,7 +62,7 @@ bool FleetManager::rentVehicle() {
         cout<< "Please customer name: " << endl;
         getline(cin, name);
         if(name.empty()){
-            cout << "invalid input, please enter a non empty string\n" << endl;
+            cout << "Invalid input. Please enter a non-empty string.\n" << endl;
             isValid = false;
         }
     }
@@ -72,7 +73,7 @@ bool FleetManager::rentVehicle() {
         if(cin.fail()){
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(),'\n');
-            cout<< "invalid input. please enter a valid registration number.\n";
+            cout<< "Invalid input. Please enter a valid registration number.\n";
         }else{
             cin.ignore(numeric_limits<streamsize>:: max(),'\n');
             break;
@@ -82,11 +83,13 @@ bool FleetManager::rentVehicle() {
         cout << "Vehicle unavailable." << endl;
         return false;
     }
-    const auto sharedVehicle = shared_ptr<Vehicle>(fleet[regNum].get(), [](Vehicle*) {
-
-    });
+    const auto sharedVehicle = shared_ptr<Vehicle>(fleet[regNum].get(), [](Vehicle*) {});
     fleet[regNum]->available = false;
-    customers[name].rentedVehicle = sharedVehicle;
+    if (customers.find(name) == customers.end()) {
+        cout << "Customer does not exist. Adding customer: " << name << endl;
+        addCustomer(name);
+    }
+    customers[name].rentVehicle(sharedVehicle);
     cout << name << " rented: " << regNum << endl;
     return true;
 }
@@ -126,12 +129,22 @@ void FleetManager::saveToFile() {
 
 void FleetManager::loadFromFile() {
     ifstream fleetFile("fleet.csv");
-    int reg, typeInt;
-    bool available;
-    char comma;
+    string line;
+    while (getline(fleetFile, line)) {
+        istringstream iss(line);
+        string regStr, typeStr, availStr;
+        getline(iss, regStr, ',');
+        getline(iss, typeStr, ',');
+        getline(iss, availStr);
 
-    while (fleetFile >> reg >> comma >> typeInt >> comma >> available) {
-        addVehicle(reg, static_cast<VehicleType>(typeInt));
+        int reg = stoi(regStr);
+        int typeInt = stoi(typeStr);
+        bool available = stoi(availStr);
+
+        if (typeInt == 0) fleet[reg] = make_unique<Bike>(reg);
+        else if (typeInt == 1) fleet[reg] = make_unique<Car>(reg);
+        else if (typeInt == 2) fleet[reg] = make_unique<Van>(reg);
+
         fleet[reg]->setAvailable(available);
     }
     fleetFile.close();
@@ -151,7 +164,7 @@ void FleetManager::loadFromFile() {
             int reg;
             customerFile.read(reinterpret_cast<char*>(&reg), sizeof(reg));
             if (fleet.contains(reg))
-                customers[name].rentVehicle(fleet[reg]);
+                customers[name].rentVehicle(shared_ptr<Vehicle>(fleet[reg].get(), [](Vehicle*) {}));
         }
     }
     customerFile.close();
@@ -160,41 +173,34 @@ void FleetManager::loadFromFile() {
 }
 
 void FleetManager::menu() {
-
     int choice;
     while (true) {
-        cout << "1. Add Vehicle\n2. Rent Vehicle\n3. Return Vehicle\n4. Load\n5. Save\n9. Exit\n";
+        cout << "1. Add Vehicle\n2. Rent Vehicle\n3. Return Vehicle\n4. Save Data\n5. Load Data\n9. Exit\n";
         cin >> choice;
+        if(cin.fail()){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cout << "Invalid choice. Please enter a number.\n";
+            continue;
+        }
         cin.ignore();
 
         if (choice == 9) break;
-        else if (choice == 1) {
-            int reg, type;
-            cout << "Enter registration number: ";
-            cin >> reg;
-            cout << "Enter type (0: Car, 1: Van, 2: Truck): ";
-            cin >> type;
-            addVehicle(reg, static_cast<VehicleType>(type));
+        if (choice == 1) {
+            addVehicle();
         } else if (choice == 2) {
-            string name;
-            int reg;
-            cin.ignore();
-            cout << "Enter customer name: ";
-            getline(cin, name);
-            if (!customers.contains(name)) addCustomer(name);
-            cout << "Enter vehicle registration: ";
-            cin >> reg;
-            rentVehicle(name, reg);
+            rentVehicle();
         } else if (choice == 3) {
             string name;
-            cin.ignore();
             cout << "Enter customer name: ";
             getline(cin, name);
             returnVehicle(name);
         } else if (choice == 4) {
-            loadFromFile();
-        } else if (choice == 5) {
             saveToFile();
+        } else if (choice == 5) {
+            loadFromFile();
+        } else {
+            cout << "Invalid option. Try again.\n";
         }
     }
 }

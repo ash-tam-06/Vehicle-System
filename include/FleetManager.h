@@ -14,8 +14,8 @@ using namespace std;
 
 class FleetManager {
 private:
-    unordered_map<int, std::unique_ptr<Vehicle>> fleet;
-    map<std::string, Customer> customers;
+    unordered_map<int, shared_ptr<Vehicle>> fleet;
+    map<string, Customer> customers;
 
 
 //    shared_ptr<Vehicle> createVehicle(VehicleType type, int reg) {
@@ -29,17 +29,11 @@ private:
 
 public:
     void addVehicle();
-
     void addCustomer(const string& name);
-
     bool rentVehicle();
-
     bool returnVehicle(const string& name);
-
     void saveToFile();
-
     void loadFromFile();
-
     void menu();
 };
 
