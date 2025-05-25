@@ -54,8 +54,7 @@ TEST(FleetManagerTest, ReturnVehicleFailWhenNoneRented) {
     FleetManager manager;
     manager.addCustomer("Ash");
 
-    bool result = manager.returnVehicle("Ash");
-    EXPECT_FALSE(result);
+    EXPECT_THROW(manager.returnVehicle("Ash"), std::logic_error);
 }
 
 int main(int argc, char **argv) {

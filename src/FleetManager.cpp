@@ -59,7 +59,7 @@ bool FleetManager::rentVehicle() {
         isValid = true;
         cout<< "Please customer name: " << endl;
         getline(cin, name);
-        if(name.empty()){
+        if(name.empty() || name == " "){
             cout << "Invalid input. Please enter a non-empty string.\n" << endl;
             isValid = false;
         }
